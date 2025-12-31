@@ -136,8 +136,15 @@ Designed to handle **daily, weekly, and monthly workflows** efficiently for orga
 ## 🛠️ Installation & Setup
 
 ### Backend
-Frontend
 npm install
+
+nodemon (npm run start)
+
+---
+
+### Frontend
+npm install
+
 ng serve
 
 ---
