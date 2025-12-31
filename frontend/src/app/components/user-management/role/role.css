@@ -1,0 +1,43 @@
+.role-card {
+  padding: 20px;
+  border-radius: 14px;
+}
+
+/* Add Role Bar */
+.role-add-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.role-add-bar input {
+  max-width: 300px;
+}
+
+/* Table polish */
+.role-table thead {
+  background: #dff5e4;
+}
+
+.role-table th {
+  font-weight: 600;
+}
+
+/* Status pill */
+.status-pill {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-pill.active {
+  background: #e6f7ee;
+  color: #1b7f4a;
+}
+
+.status-pill.inactive {
+  background: #fdecec;
+  color: #b42318;
+}

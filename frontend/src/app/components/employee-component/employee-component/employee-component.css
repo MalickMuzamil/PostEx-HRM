@@ -1,0 +1,20 @@
+.combination-chain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.combination-chain .badge {
+  position: relative;
+  padding-right: 14px;
+}
+
+/* Arrow between badges */
+.combination-chain .badge:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  right: -10px;
+  color: #6b7280;
+  font-weight: bold;
+}

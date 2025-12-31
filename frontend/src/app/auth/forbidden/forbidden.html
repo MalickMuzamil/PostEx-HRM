@@ -1,0 +1,65 @@
+<div class="container-fluid forbidden-wrapper">
+    <div class="row justify-content-center w-100">
+        <div class="col-xl-6 col-lg-7 col-md-9 col-sm-11">
+            <div class="card shadow-lg border-0 forbidden-card">
+                <div class="card-body text-center p-5">
+
+                    <!-- Icon -->
+                    <div class="forbidden-avatar mb-4">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+
+                    <!-- Title -->
+                    <h2 class="fw-bold mb-2">Access Restricted</h2>
+
+                    <!-- Subtitle -->
+                    <p class="text-muted fs-6 mb-4">
+                        You don’t have permission to access this section.
+                    </p>
+
+                    <hr class="my-4" />
+
+                    <!-- Info -->
+                    <div class="forbidden-hints text-start mx-auto">
+
+                        <div class="hint-item">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>This module is restricted by access rules</span>
+                        </div>
+
+                        <div class="hint-item">
+                            <i class="fa-solid fa-user-shield"></i>
+                            <span>Your role does not include this permission</span>
+                        </div>
+
+                        <div class="hint-item">
+                            <i class="fa-solid fa-bars"></i>
+                            <span>Please use the sidebar to navigate to allowed modules</span>
+                        </div>
+
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="mt-4 text-muted small">
+                        If you believe this is a mistake, contact your administrator.
+                    </div>
+
+                    <div class="mt-4">
+                        <button class="btn btn-outline-secondary px-4" (click)="goBack()" [disabled]="loading">
+                            <ng-container *ngIf="!loading; else loadingTpl">
+                                <i class="fa-solid fa-arrow-left me-2"></i>
+                                Go Back
+                            </ng-container>
+
+                            <ng-template #loadingTpl>
+                                <span class="spinner-border spinner-border-sm me-2"></span>
+                                Redirecting...
+                            </ng-template>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

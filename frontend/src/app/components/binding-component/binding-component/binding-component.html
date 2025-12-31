@@ -1,0 +1,84 @@
+<app-table title="Functional Hierarchies" [canView]="canViewList" [showFilters]="true">
+
+    <div table-header-actions>
+        <button *ngIf="canCreate" class="btn btn-primary" (click)="openForm()">
+            Add New Hierarchy
+        </button>
+    </div>
+
+    <div table-filters>
+        <select class="form-select w-auto" [(ngModel)]="statusFilter" (ngModelChange)="applyFilter()">
+            <option value="">All</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="upcoming">Upcoming</option>
+        </select>
+    </div>
+
+    <thead>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Effective From</th>
+        <th>Effective To</th>
+        <th>Status</th>
+        <th class="text-center">Actions</th>
+    </thead>
+
+    <tbody>
+        <tr *ngFor="let h of pagedHierarchies">
+            <td>{{ h.fh_id }}</td>
+
+            <td>{{ h.hierarchy_name }}</td>
+
+            <td>{{ h.effective_from | date }}</td>
+
+            <td>{{ h.effective_to ? (h.effective_to | date) : '-' }}</td>
+
+            <td>
+                <span class="badge" [ngClass]="{
+                'bg-success text-white': h.status === 'active',
+                'bg-danger': h.status === 'inactive',
+                'bg-warning text-dark': h.status === 'upcoming'
+              }">
+                    {{ h.status | uppercase }}
+                </span>
+            </td>
+
+            <td class="text-center">
+                <div class="d-flex justify-content-center gap-2 flex-nowrap">
+
+                    <button *ngIf="canViewHierarchy" class="btn btn-dark btn-sm" (click)="viewDetails(h.fh_id)">
+                        View
+                    </button>
+
+                    <button *ngIf="canUpdate" class="btn btn-dark btn-sm" (click)="edit(h)">
+                        Edit
+                    </button>
+
+                    <button *ngIf="canDelete" class="btn btn-dark btn-sm" [disabled]="h.status === 'inactive'"
+                        (click)="delete(h.fh_id)">
+                        Delete
+                    </button>
+
+                </div>
+            </td>
+        </tr>
+    </tbody>
+
+</app-table>
+
+<app-pagination [totalItems]="filteredHierarchies.length" [pageSize]="pageSize" [currentPage]="currentPage"
+    (pageChange)="onPageChange($event)">
+</app-pagination>
+
+<div class="custom-modal-wrapper" *ngIf="showForm">
+
+    <div class="modal-backdrop fade show"></div>
+
+    <div class="custom-modal fade-in">
+        <app-binding-form [editData]="selectedHierarchy" [nodes]="nodes" [entityTypes]="entityTypes"
+            (close)="onFormClose($event)">
+        </app-binding-form>
+    </div>
+
+</div>

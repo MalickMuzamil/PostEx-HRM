@@ -1,0 +1,58 @@
+<app-table title="Nodes" [canView]="canView">
+
+    <div table-header-actions class="d-flex align-items-center gap-2">
+
+        <!-- SEARCH -->
+        <input type="text" class="form-control" style="max-width:220px" placeholder="Search by node name"
+            [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" />
+
+        <!-- ADD BUTTON -->
+        <button *ngIf="canCreate" class="btn btn-primary btn-sm fw-bold px-3 d-inline-flex align-items-center gap-1"
+            (click)="openModal()">
+            <i class="fa fa-plus"></i>
+            <span>Add</span>
+        </button>
+
+    </div>
+
+    <thead>
+        <th>ID</th>
+        <th>Node Name</th>
+        <th>Shortcode</th>
+        <th>Type</th>
+        <th *ngIf="canShowActions" class="text-center">Actions</th>
+    </thead>
+
+    <!-- TABLE BODY -->
+    <tbody>
+        <tr *ngFor="let n of pagedNodes">
+            <td>{{ n.node_id }}</td>
+            <td class="fw-semibold">{{ n.node_name }}</td>
+            <td>{{ n.shortcode || '-' }}</td>
+            <td>
+                <span class="badge bg-secondary">{{ n.type_name }}</span>
+            </td>
+
+            <td class="text-center" *ngIf="canShowActions">
+                <button *ngIf="canUpdate" class="btn btn-warning btn-sm me-2" (click)="openModal(n)">
+                    <i class="fa fa-edit"></i>
+                </button>
+
+                <button *ngIf="canDelete" class="btn btn-danger btn-sm" (click)="delete(n.node_id)">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+
+</app-table>
+
+<div class="modal-backdrop fade show" *ngIf="showModal"></div>
+
+<div class="custom-modal fade-in" *ngIf="showModal">
+    <app-node-form [editData]="selected" (close)="closeModal($event)">
+    </app-node-form>
+</div>
+
+<app-pagination [totalItems]="nodes.length" [pageSize]="pageSize" [currentPage]="currentPage"
+    (pageChange)="onPageChange($event)"></app-pagination>

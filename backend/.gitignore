@@ -1,0 +1,48 @@
+# ======================
+# Environment variables
+# ======================
+.env
+.env.*
+
+# ======================
+# Logs
+# ======================
+logs
+*.log
+
+# ======================
+# Build output
+# ======================
+bin/
+obj/
+dist/
+build/
+
+# ======================
+# Node (agar backend Node hai)
+# ======================
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# ======================
+# .NET (agar backend .NET hai)
+# ======================
+*.user
+*.suo
+*.cache
+*.pdb
+*.mdb
+
+# ======================
+# IDEs
+# ======================
+.vscode/
+.idea/
+*.swp
+
+# ======================
+# OS files
+# ======================
+.DS_Store
+Thumbs.db

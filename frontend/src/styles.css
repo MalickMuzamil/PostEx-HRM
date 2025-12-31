@@ -1,0 +1,245 @@
+/* --------------------------------------------------
+   1. RESET
+-------------------------------------------------- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: clamp(14px, 1.1vw, 16px);
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: #ffffff !important;
+  color: #111827 !important;
+  min-height: 100vh;
+  font-size: clamp(14px, 1.15vw, 16px);
+  line-height: 1.6;
+}
+
+/* --------------------------------------------------
+   2. THEME VARIABLES (POSTEX LIGHT)
+-------------------------------------------------- */
+:root {
+  --bg-page: #f6f7f8;
+
+  --bg-card: #ffffff;
+  --bg-card-alt: #f9fafb;
+
+  --card-border: #e5e7eb;
+  --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+
+  --accent-green: #a8d972;
+  --accent-red: #ff5c5c;
+
+  --text-dark: #111827;
+  --text-gray: #6b7280;
+  --text-muted: #9ca3af;
+}
+
+/* --------------------------------------------------
+   3. LAYOUT
+-------------------------------------------------- */
+.main-wrapper {
+  min-height: 100vh;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background: var(--bg-page);
+}
+
+/* --------------------------------------------------
+   4. CARDS (LIGHT, CLEAN)
+-------------------------------------------------- */
+.card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--card-border) !important;
+  border-radius: 16px !important;
+  color: var(--text-dark) !important;
+  box-shadow: var(--card-shadow);
+}
+
+.card-header {
+  background: var(--bg-card-alt) !important;
+  border-bottom: 1px solid var(--card-border) !important;
+  padding: clamp(0.75rem, 1.5vw, 1rem) clamp(1rem, 2vw, 1.25rem) !important;
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: clamp(15px, 1.3vw, 18px);
+}
+
+/* --------------------------------------------------
+   5. TABLE
+-------------------------------------------------- */
+.table {
+  background: var(--bg-card) !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+.table thead th {
+  background: #d7f1df !important;
+  color: #000 !important;
+  font-weight: 600 !important;
+  padding: clamp(0.6rem, 1.2vw, 0.75rem) !important;
+  border-bottom: 1px solid var(--card-border) !important;
+  font-size: clamp(13px, 1.1vw, 14px);
+}
+
+.table tbody td {
+  background: var(--bg-card) !important;
+  color: var(--text-gray) !important;
+  padding: clamp(0.6rem, 1.2vw, 0.75rem) !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  font-size: clamp(13px, 1.05vw, 14px);
+}
+
+.table-hover tbody tr:hover {
+  background: #f9fafb !important;
+}
+
+/* --------------------------------------------------
+   6. BUTTONS (BLACK POSTEX)
+-------------------------------------------------- */
+.btn,
+.btn-primary,
+.btn-warning,
+.btn-danger {
+  background-color: #000 !important;
+  color: #fff !important;
+  border: none !important;
+  padding: clamp(6px, 1vw, 8px) clamp(14px, 2vw, 18px) !important;
+  border-radius: 10px !important;
+  cursor: pointer;
+  font-size: clamp(13px, 1.05vw, 15px);
+
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12) !important;
+}
+
+.btn:hover {
+  background-color: #111 !important;
+  color: #ffffff !important;
+}
+
+.btn[disabled] {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+.btn-secondary {
+  background: #ffffff !important;
+  color: #000 !important;
+}
+
+/* --------------------------------------------------
+   7. BADGES
+-------------------------------------------------- */
+.badge {
+  padding: clamp(4px, 0.8vw, 6px) clamp(8px, 1.5vw, 12px) !important;
+  border-radius: 6px !important;
+  font-weight: 600 !important;
+  font-size: clamp(11px, 0.9vw, 12px);
+}
+
+.bg-success {
+  background: var(--accent-green) !important;
+  color: #000 !important;
+}
+
+.bg-danger {
+  background: var(--accent-red) !important;
+  color: #fff !important;
+}
+
+/* --------------------------------------------------
+   8. MODAL
+-------------------------------------------------- */
+.modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(0, 0, 0, 0.35) !important;
+  backdrop-filter: blur(4px) !important;
+  z-index: 998 !important;
+}
+
+.modal-dialog,
+.modal-content {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+.custom-modal {
+  position: fixed;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  max-width: 95%;
+  background: #ffffff !important;
+  padding: clamp(20px, 4vw, 32px) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3) !important;
+  z-index: 999;
+}
+
+.custom-modal .card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+/* --------------------------------------------------
+   9. FORMS
+-------------------------------------------------- */
+.form-control,
+select {
+  background: #ffffff !important;
+  color: var(--text-dark) !important;
+  border: 2px solid #d1d5db !important;
+  padding: clamp(10px, 2vw, 12px) clamp(12px, 2vw, 14px) !important;
+  border-radius: 10px !important;
+  font-size: clamp(13px, 1.05vw, 15px);
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+}
+
+.form-control:focus,
+select:focus {
+  border-color: var(--accent-green) !important;
+  box-shadow: 0 0 0 4px rgba(168, 217, 114, 0.25) !important;
+  outline: none;
+}
+
+/* --------------------------------------------------
+   10. UTILITIES
+-------------------------------------------------- */
+.flex {
+  display: flex;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mt-1 {
+  margin-top: clamp(0.75rem, 1.5vw, 1rem);
+}
+
+.mt-2 {
+  margin-top: clamp(1.5rem, 3vw, 2rem);
+}

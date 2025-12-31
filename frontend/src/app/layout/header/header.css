@@ -1,0 +1,73 @@
+/* ====================================
+   HEADER (TOP NAVBAR) — POSTEX STYLE
+==================================== */
+.app-header {
+  height: 60px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 998;
+}
+
+/* LEFT SECTION */
+.app-header .left-section {
+  gap: 12px;
+}
+
+/* TITLE */
+.header-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  letter-spacing: 0.3px;
+}
+
+/* RIGHT SECTION */
+.app-header .right-section {
+  gap: 14px;
+}
+
+/* WELCOME TEXT */
+.welcome-text {
+  font-size: 14px;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+/* PROFILE AVATAR */
+.profile-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #a8d972;
+  background: #f3f4f6;
+  cursor: pointer;
+}
+
+/* MOBILE SIDEBAR TOGGLE */
+.mobile-toggle {
+  font-size: 22px;
+  cursor: pointer;
+  color: #111;
+  transition: color 0.2s ease, transform 0.3s ease;
+}
+
+.mobile-toggle:hover {
+  color: #a8d972;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .header-title {
+    font-size: 16px;
+  }
+
+  .welcome-text {
+    display: none;
+  }
+}

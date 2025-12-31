@@ -1,0 +1,207 @@
+/* ===============================
+   PAGE HEADER
+   =============================== */
+.page-header h2 {
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* ===============================
+   CARD
+   =============================== */
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.form-card h3 {
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+/* ===============================
+   FORM ROW
+   =============================== */
+.form-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.form-row input,
+.form-row select {
+  height: 48px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  min-width: 220px;
+  font-size: 14px;
+}
+
+.form-row input:focus,
+.form-row select:focus {
+  outline: none;
+  border-color: #000;
+}
+
+.form-row input[disabled] {
+  background: #f5f5f5;
+}
+
+/* ===============================
+   PASSWORD
+   =============================== */
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 40px;
+}
+
+.password-wrapper i {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #777;
+}
+
+/* ===============================
+   BUTTONS
+   =============================== */
+button {
+  height: 42px;
+  padding: 0 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: #000;
+  color: #fff;
+  font-size: 14px;
+}
+
+button:disabled {
+  opacity: 0.6;
+}
+
+.cancel-btn {
+  background: #e5e7eb;
+  color: #111;
+}
+
+.danger-btn {
+  background: #dc2626;
+}
+
+/* ===============================
+   EMPLOYEES HEADER
+   =============================== */
+.employees-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.employees-header h3 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.employees-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.employees-filter input,
+.employees-filter select {
+  height: 50px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 0 12px;
+  font-size: 14px;
+}
+
+/* ===============================
+   TABLE
+   =============================== */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead {
+  background: #dff5e5;
+}
+
+.table th,
+.table td {
+  padding: 14px;
+  font-size: 14px;
+}
+
+.table tr:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+
+/* ===============================
+   STATUS
+   =============================== */
+.status-pill {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.status-pill.active {
+  background: #e6f9ee;
+  color: #1b8f4b;
+}
+
+.status-pill.inactive {
+  background: #fdeaea;
+  color: #c0392b;
+}
+
+.status-pill.expired {
+  background: #fff4e5;
+  color: #b45309;
+}
+
+/* ===============================
+   ACTIONS
+   =============================== */
+.action-col {
+  display: flex;
+  gap: 10px;
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+@media (max-width: 768px) {
+  .employees-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .employees-filter {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-row input,
+  .form-row select,
+  button {
+    width: 100%;
+  }
+}

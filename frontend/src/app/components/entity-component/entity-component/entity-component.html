@@ -1,0 +1,51 @@
+<app-table title="Entity Types" [canView]="canView" [showFilters]="false">
+
+  <div table-header-actions class="d-flex align-items-center gap-2">
+
+    <input type="text" class="form-control" style="max-width:220px" placeholder="Search by type name"
+      [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" />
+
+    <button *ngIf="canCreate" class="btn btn-primary btn-sm fw-bold px-3 d-inline-flex align-items-center gap-1"
+      (click)="openModal()">
+      <i class="fa fa-plus"></i>
+      <span>Add</span>
+    </button>
+
+  </div>
+
+  <thead>
+    <th>Type Name</th>
+    <th>Shortcode</th>
+    <th *ngIf="canShowActions" class="text-center">Actions</th>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let t of pagedEntityTypes">
+      <td class="fw-semibold">{{ t.type_name }}</td>
+      <td class="fw-semibold">{{ t.shortcode }}</td>
+
+      <td class="text-center" *ngIf="canShowActions">
+        <button *ngIf="canUpdate" class="btn btn-warning btn-sm me-2 shadow-sm" (click)="openModal(t)">
+          <i class="fa fa-edit"></i>
+        </button>
+
+        <button *ngIf="canDelete" class="btn btn-danger btn-sm shadow-sm" (click)="onDelete(t.type_id)">
+          <i class="fa fa-trash"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+
+</app-table>
+
+<!-- PAGINATION -->
+<app-pagination [totalItems]="filteredEntityTypes.length" [pageSize]="pageSize" [currentPage]="currentPage"
+  (pageChange)="onPageChange($event)">
+</app-pagination>
+
+<div class="modal-backdrop fade show" *ngIf="showModal"></div>
+
+<div class="custom-modal fade-in" *ngIf="showModal">
+  <app-entity-form [editData]="selected" (close)="closeModal($event)">
+  </app-entity-form>
+</div>

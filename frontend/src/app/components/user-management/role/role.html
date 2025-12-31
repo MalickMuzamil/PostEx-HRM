@@ -1,0 +1,152 @@
+<div class="page-header">
+    <h2>User Management → Roles</h2>
+</div>
+
+<div class="card role-card">
+
+    <!-- TOP CONTROLS -->
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+
+        <!-- LEFT: ADD ROLE -->
+        <div class="d-flex gap-2 align-items-start flex-wrap" *ngIf="canCreate">
+
+            <div>
+                <input type="text" class="form-control" style="max-width:280px" placeholder="Enter role name"
+                    [formControl]="roleNameCtrl" maxlength="15"
+                    (keypress)="AppValidators.allowOnlyAlphabets($event, 15)"
+                    (paste)="AppValidators.handlePaste($event, 'alphabets', 15)" />
+
+                <div class="text-danger small mt-1" *ngIf="roleNameCtrl.touched && roleNameCtrl.invalid">
+                    <div *ngIf="roleNameCtrl.errors?.['required']">Role name is required</div>
+                    <div *ngIf="roleNameCtrl.errors?.['onlyAlphabets']">Only alphabets allowed</div>
+                </div>
+
+                <small class="text-muted">
+                    {{ roleNameCtrl.value?.length || 0 }} / 15
+                </small>
+            </div>
+
+            <button class="btn btn-primary my-2" (click)="createRole()" [disabled]="roleNameCtrl.invalid || addingRole">
+
+                <ng-container *ngIf="!addingRole; else addingTpl">
+                    Add Role
+                </ng-container>
+
+                <ng-template #addingTpl>
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                    Adding...
+                </ng-template>
+            </button>
+
+        </div>
+
+        <!-- RIGHT: FILTERS -->
+        <div class="d-flex gap-2">
+            <input type="text" class="form-control" style="min-width:220px" placeholder="Search role by name"
+                [(ngModel)]="searchTerm" />
+
+            <select class="form-select" style="min-width:180px" [(ngModel)]="statusFilter">
+                <option value="all">All Roles</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+        </div>
+
+    </div>
+
+    <app-table title="Roles" [canView]="canView" [showFilters]="false">
+
+        <thead>
+            <th>ID</th>
+            <th>Role Name</th>
+            <th>Status</th>
+            <th class="text-end" *ngIf="canShowActions">Action</th>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let role of pagedRoles">
+
+                <td>{{ role.role_id }}</td>
+
+                <td>
+
+                    <ng-container *ngIf="editRoleId !== role.role_id; else editTpl">
+                        {{ role.role_name }}
+                    </ng-container>
+
+                    <ng-template #editTpl>
+                        <div>
+                            <input type="text" class="form-control form-control-sm" [formControl]="editRoleCtrl"
+                                maxlength="15" (keypress)="AppValidators.allowOnlyAlphabets($event, 15)"
+                                (paste)="AppValidators.handlePaste($event, 'alphabets', 15)" />
+
+                            <div class="text-danger small mt-1" *ngIf="editRoleCtrl.touched && editRoleCtrl.invalid">
+                                <div *ngIf="editRoleCtrl.errors?.['required']">Role name is required</div>
+                                <div *ngIf="editRoleCtrl.errors?.['onlyAlphabets']">Only alphabets allowed</div>
+                            </div>
+
+                            <small class="text-muted">
+                                {{ editRoleCtrl.value?.length || 0 }} / 15
+                            </small>
+                        </div>
+                    </ng-template>
+
+                </td>
+
+                <td>
+                    <span class="status-pill" [class.active]="role.is_active" [class.inactive]="!role.is_active">
+                        {{ role.is_active ? 'Active' : 'Inactive' }}
+                    </span>
+                </td>
+
+                <td class="text-end" *ngIf="canShowActions">
+                    <div class="d-flex justify-content-end gap-2 flex-wrap">
+
+                        <button *ngIf="canUpdate && editRoleId !== role.role_id" class="btn btn-sm btn-outline-primary"
+                            (click)="startEdit(role)">
+                            Edit
+                        </button>
+
+                        <button *ngIf="canUpdate && editRoleId === role.role_id" class="btn btn-sm btn-success"
+                            (click)="saveEdit(role)" [disabled]="editRoleCtrl.invalid || savingRoleId === role.role_id">
+
+                            <ng-container *ngIf="savingRoleId !== role.role_id; else savingTpl">
+                                Save
+                            </ng-container>
+
+                            <ng-template #savingTpl>
+                                <span class="spinner-border spinner-border-sm"></span>
+                            </ng-template>
+                        </button>
+
+                        <button *ngIf="editRoleId === role.role_id" class="btn btn-sm btn-secondary"
+                            (click)="cancelEdit()">
+                            Cancel
+                        </button>
+
+                        <button *ngIf="canDelete" class="btn btn-sm"
+                            [ngClass]="role.is_active ? 'btn-danger' : 'btn-success'" (click)="updateStatus(role)"
+                            [disabled]="togglingRoleId === role.role_id">
+
+                            <ng-container *ngIf="togglingRoleId !== role.role_id; else toggleTpl">
+                                {{ role.is_active ? 'Deactivate' : 'Activate' }}
+                            </ng-container>
+
+                            <ng-template #toggleTpl>
+                                <span class="spinner-border spinner-border-sm"></span>
+                            </ng-template>
+                        </button>
+
+                    </div>
+                </td>
+
+            </tr>
+        </tbody>
+
+    </app-table>
+
+    <app-pagination [totalItems]="filteredRoles.length" [pageSize]="pageSize" [currentPage]="currentPage"
+        (pageChange)="onPageChange($event)">
+    </app-pagination>
+
+</div>

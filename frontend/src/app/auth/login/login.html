@@ -1,0 +1,47 @@
+<div class="login-wrapper">
+    <form [formGroup]="form" (ngSubmit)="submit()" class="login-card">
+
+        <div class="text-center mb-4">
+            <img src="/assets/postex_dark.png" alt="PostEx Logo" class="img-fluid logo" />
+        </div>
+
+        <div class="mb-3">
+            <label>Email</label>
+            <input type="email" class="form-control" formControlName="email" placeholder="Enter Email">
+            <small class="text-danger" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+                Invalid email
+            </small>
+        </div>
+
+        <div class="mb-3">
+            <label>Password</label>
+
+            <div class="password-wrapper">
+                <input [type]="showPassword ? 'text' : 'password'" class="form-control" formControlName="password"
+                    placeholder="Enter Password" />
+
+                <span class="eye-icon" (click)="togglePassword()">
+                    <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                </span>
+            </div>
+
+            <small class="text-danger" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+                Minimum 6 characters
+            </small>
+        </div>
+
+
+
+        <button class="btn btn-dark w-100" [disabled]="loading">
+            <ng-container *ngIf="!loading; else loadingTpl">
+                Login
+            </ng-container>
+
+            <ng-template #loadingTpl>
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Signing in...
+            </ng-template>
+        </button>
+
+    </form>
+</div>

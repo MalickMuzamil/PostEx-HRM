@@ -1,0 +1,59 @@
+<div class="modal-content">
+
+    <h5>{{ editData ? 'Edit Entity Type' : 'Add Entity Type' }}</h5>
+
+    <form [formGroup]="form">
+
+        <!-- TYPE NAME -->
+        <div class="mb-3">
+            <label>Type Name</label>
+
+            <input formControlName="type_name" class="form-control" maxlength="15"
+                (keypress)="AppValidators.allowOnlyAlphabets($event, 15)"
+                (paste)="AppValidators.handlePaste($event, 'alphabets', 15)" />
+
+            <!-- ERRORS -->
+            <div class="text-danger mt-1"
+                *ngIf="form.controls['type_name'].touched && form.controls['type_name'].invalid">
+
+                <div *ngIf="form.controls['type_name'].errors?.['required']">
+                    Type name is required
+                </div>
+
+                <div *ngIf="form.controls['type_name'].errors?.['onlyAlphabets']">
+                    Only alphabets allowed
+                </div>
+            </div>
+
+            <!-- CHARACTER COUNTER -->
+            <small class="text-muted">
+                {{ form.controls['type_name'].value?.length || 0 }} / 15
+            </small>
+        </div>
+
+
+        <!-- SHORTCODE -->
+        <div class="mb-3">
+            <label>Shortcode</label>
+
+            <input formControlName="shortcode" class="form-control" maxlength="3"
+                (keypress)="AppValidators.allowOnlyAlphabets($event, 3)"
+                (paste)="AppValidators.handlePaste($event, 'alphabets', 3)" />
+
+            <small class="text-muted">
+                {{ form.controls['shortcode'].value?.length || 0 }} / 3
+            </small>
+
+        </div>
+
+        <button type="button" class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
+            Save
+        </button>
+
+        <button type="button" class="btn btn-secondary ms-2" (click)="cancel()">
+            Cancel
+        </button>
+
+    </form>
+
+</div>

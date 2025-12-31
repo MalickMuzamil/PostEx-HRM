@@ -1,0 +1,85 @@
+<!-- HEADER -->
+<div class="page-header mb-3 d-flex justify-content-between align-items-start">
+  <div>
+    <h1>View Role Rights</h1>
+    <p class="text-muted">{{ roleName }} / {{ appName }}</p>
+  </div>
+
+  <button class="btn btn-dark" (click)="goBack()">← Back</button>
+</div>
+
+<!-- MAIN CARD -->
+<div class="card role-rights-card" *ngIf="canView; else noAccess">
+
+  <!-- CARD HEADER -->
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span class="fw-bold">Menus & Permissions</span>
+
+    <!-- LEGEND -->
+    <div class="legend d-flex gap-2">
+      <span class="legend-chip">V <small>View</small></span>
+      <span class="legend-chip">C <small>Create</small></span>
+      <span class="legend-chip">U <small>Update</small></span>
+      <span class="legend-chip">D <small>Delete</small></span>
+    </div>
+  </div>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb-bar px-3 py-2">
+    <ng-container *ngFor="let b of breadcrumb; let last = last">
+      <span [class.fw-semibold]="last">{{ b.menu_name }}</span>
+      <span *ngIf="!last"> / </span>
+    </ng-container>
+  </div>
+
+  <!-- TREE -->
+  <div class="card-body tree-panel">
+    <ul class="tree-list">
+      <ng-container *ngFor="let root of menuTree">
+        <ng-template
+          [ngTemplateOutlet]="treeNode"
+          [ngTemplateOutletContext]="{ node: root }">
+        </ng-template>
+      </ng-container>
+    </ul>
+  </div>
+</div>
+
+<!-- NO ACCESS -->
+<ng-template #noAccess>
+  <div class="alert alert-warning text-center m-4">
+    <i class="fa fa-lock me-2"></i>
+    You do not have permission to view role rights.
+  </div>
+</ng-template>
+
+<!-- TREE TEMPLATE -->
+<ng-template #treeNode let-node="node">
+  <li>
+    <div class="tree-item" (click)="setActiveNode(node)">
+      <input
+        type="checkbox"
+        disabled
+        [checked]="isChecked(node.menu_id)" />
+
+      <span>{{ node.menu_name }}</span>
+    </div>
+
+    <!-- ACTION CHIPS (LEAF ONLY) -->
+    <div class="action-chips" *ngIf="node.route && actionMap[node.menu_id]">
+      <span class="chip" [class.active]="actionMap[node.menu_id].view">V</span>
+      <span class="chip" [class.active]="actionMap[node.menu_id].create">C</span>
+      <span class="chip" [class.active]="actionMap[node.menu_id].update">U</span>
+      <span class="chip" [class.active]="actionMap[node.menu_id].delete">D</span>
+    </div>
+
+    <ul *ngIf="node.children?.length">
+      <ng-container *ngFor="let child of node.children">
+        <ng-template
+          [ngTemplateOutlet]="treeNode"
+          [ngTemplateOutletContext]="{ node: child }">
+        </ng-template>
+      </ng-container>
+    </ul>
+  </li>
+</ng-template>

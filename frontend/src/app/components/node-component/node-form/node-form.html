@@ -1,0 +1,83 @@
+<div class="modal-content">
+
+    <h5>{{ editData ? 'Edit Node' : 'Add Node' }}</h5>
+
+    <form [formGroup]="form">
+
+        <!-- ENTITY TYPE -->
+        <div class="mb-3">
+            <label>Entity Type</label>
+
+            <select class="form-select" formControlName="type_id">
+                <option value="">Select...</option>
+                <option *ngFor="let t of entityTypes" [value]="t.type_id">
+                    {{ t.type_name }}
+                </option>
+            </select>
+
+            <div class="text-danger mt-1" *ngIf="form.controls['type_id'].touched && form.controls['type_id'].invalid">
+                Entity type is required
+            </div>
+        </div>
+
+        <!-- NODE NAME -->
+        <div class="mb-3">
+            <label>Node Name</label>
+
+            <input formControlName="node_name" class="form-control" maxlength="15"
+                (keypress)="AppValidators.allowOnlyAlphabets($event, 15)"
+                (paste)="AppValidators.handlePaste($event, 'alphabets', 15)" />
+
+            <div class="text-danger mt-1"
+                *ngIf="form.controls['node_name'].touched && form.controls['node_name'].invalid">
+
+                <div *ngIf="form.controls['node_name'].errors?.['required']">
+                    Node name is required
+                </div>
+
+                <div *ngIf="form.controls['node_name'].errors?.['onlyAlphabets']">
+                    Only alphabets allowed
+                </div>
+            </div>
+
+            <small class="text-muted">
+                {{ form.controls['node_name'].value?.length || 0 }} / 15
+            </small>
+        </div>
+
+        <!-- SHORTCODE -->
+        <div class="mb-3">
+            <label>Shortcode</label>
+
+            <input formControlName="shortcode" class="form-control" maxlength="3"
+                (keypress)="AppValidators.allowOnlyAlphabets($event, 3)"
+                (paste)="AppValidators.handlePaste($event, 'alphabets', 3)" />
+
+            <div class="text-danger mt-1"
+                *ngIf="form.controls['shortcode'].touched && form.controls['shortcode'].invalid">
+
+                <div *ngIf="form.controls['shortcode'].errors?.['required']">
+                    Shortcode is required
+                </div>
+
+                <div *ngIf="form.controls['shortcode'].errors?.['onlyAlphabets']">
+                    Only alphabets allowed
+                </div>
+            </div>
+
+            <small class="text-muted">
+                {{ form.controls['shortcode'].value?.length || 0 }} / 3
+            </small>
+        </div>
+
+        <button type="button" class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
+            Save
+        </button>
+
+        <button type="button" class="btn btn-secondary ms-2" (click)="cancel()">
+            Cancel
+        </button>
+
+    </form>
+
+</div>

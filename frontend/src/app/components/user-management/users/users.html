@@ -1,0 +1,148 @@
+<div class="page-header">
+    <h2>User Management → Grant Access</h2>
+</div>
+
+<!-- FORM -->
+<div class="card form-card" *ngIf="selectedEmployee">
+    <h3>{{ isEditMode ? 'Edit User Access' : 'Grant User Access' }}</h3>
+
+    <div class="form-row align-end">
+
+        <!-- EMAIL -->
+        <input type="email" [value]="newUser.email" disabled />
+
+        <!-- PASSWORD -->
+        <div class="password-wrapper" *ngIf="!isEditMode">
+            <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="newUser.password" readonly />
+            <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" (click)="togglePassword()"></i>
+        </div>
+
+        <!-- ROLE -->
+        <select [(ngModel)]="newUser.role_id">
+            <option value="">Select Role</option>
+            <option *ngFor="let role of roles" [value]="role.role_id">
+                {{ role.role_name }}
+            </option>
+        </select>
+
+        <!-- EFFECTIVE FROM -->
+        <div class="date-group">
+            <label>Effective From <span class="text-danger">*</span></label>
+            <input type="date" [(ngModel)]="newUser.effective_from" [min]="today" required />
+        </div>
+
+        <!-- EFFECTIVE TO -->
+        <div class="date-group">
+            <label>Effective To</label>
+            <input type="date" [(ngModel)]="newUser.effective_to" [min]="newUser.effective_from || today" />
+        </div>
+
+        <!-- ACTIONS -->
+        <button (click)="submitUser()" [disabled]="loading || !newUser.effective_from">
+            {{ isEditMode ? 'Update Access' : 'Grant Access' }}
+        </button>
+
+        <button class="cancel-btn" (click)="resetForm()">
+            Cancel
+        </button>
+
+    </div>
+</div>
+
+<!-- 🔥 EMPLOYEES LIST (REUSABLE TABLE) -->
+<app-table title="Employees" [canView]="canView" [showFilters]="true">
+
+    <!-- FILTERS -->
+    <div table-filters class="d-flex gap-2 align-items-center">
+
+        <!-- SEARCH -->
+        <input type="text" class="form-control" style="max-width:220px" placeholder="Search by name"
+            [(ngModel)]="searchTerm" maxlength="30" (keypress)="AppValidators.allowOnlyAlphabets($event, 30)"
+            (paste)="AppValidators.handlePaste($event, 'alphabets', 30)" />
+
+        <!-- STATUS FILTER -->
+        <select class="form-select w-auto" [(ngModel)]="filterType">
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="expired">Expired</option>
+            <option value="unassigned">Unassigned</option>
+        </select>
+
+    </div>
+
+    <!-- TABLE HEAD -->
+    <thead>
+        <th>ID</th>
+        <th>Employee</th>
+        <th>Email</th>
+        <th>Access</th>
+        <th>Role</th>
+        <th *ngIf="canShowActions">Action</th>
+    </thead>
+
+    <!-- TABLE BODY -->
+    <tbody>
+        <tr *ngFor="let emp of pagedEmployees">
+
+            <td>{{ emp.emp_id }}</td>
+            <td>{{ emp.full_name }}</td>
+            <td>{{ emp.email }}</td>
+
+            <!-- ACCESS STATUS -->
+            <td>
+                <span class="status-pill" [ngClass]="{
+                active: emp.access_status === 'active',
+                inactive: emp.access_status === 'unassigned',
+                expired: emp.access_status === 'expired'
+              }">
+                    {{ emp.access_status | titlecase }}
+                </span>
+            </td>
+
+            <!-- ROLE -->
+            <td>
+                <span *ngIf="userEmails.has(emp.email.toLowerCase())" class="role-pill">
+                    {{ userRoleMap.get(emp.email.toLowerCase())?.role_name }}
+                </span>
+                <span *ngIf="!userEmails.has(emp.email.toLowerCase())">—</span>
+            </td>
+
+            <!-- ACTIONS -->
+            <td *ngIf="canShowActions">
+
+                <!-- GRANT -->
+                <button *ngIf="!userEmails.has(emp.email.toLowerCase()) && canCreate" (click)="openGrantAccess(emp)">
+                    Grant Access
+                </button>
+
+                <!-- EDIT / REVOKE -->
+                <div *ngIf="userEmails.has(emp.email.toLowerCase())" class="action-col">
+
+                    <button *ngIf="canUpdate" (click)="openEditAccess(emp)">
+                        Edit Access
+                    </button>
+
+                    <button *ngIf="canDelete" class="danger-btn" (click)="revokeAccess(emp)">
+                        Revoke Access
+                    </button>
+
+                </div>
+
+            </td>
+        </tr>
+    </tbody>
+
+</app-table>
+
+<app-pagination [totalItems]="filteredEmployees().length" [pageSize]="pageSize" [currentPage]="currentPage"
+    (pageChange)="onPageChange($event)"></app-pagination>
+
+<!-- NO ACCESS -->
+<ng-template #noAccess>
+    <div class="alert alert-warning text-center m-4">
+        <i class="fa fa-lock me-2"></i>
+        You do not have permission to view users.
+    </div>
+</ng-template>
+
+

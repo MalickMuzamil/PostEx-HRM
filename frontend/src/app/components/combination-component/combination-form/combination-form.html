@@ -1,0 +1,108 @@
+<h4 class="mb-3 fw-bold">
+    Hierarchy #{{ hierarchy?.fh_id }}
+    <span class="text-muted">— Build Combination</span>
+</h4>
+
+<div class="d-flex justify-content-end mb-3">
+    <button class="btn btn-secondary px-3" (click)="close.emit(false)">
+        <i class="fa fa-times me-1"></i> Close
+    </button>
+</div>
+
+<!-- =========================
+ CREATE / UPDATE FORM
+========================= -->
+<div *ngIf="canCreate || (canUpdate && editingCombination)"
+     class="card shadow-sm p-4 mb-4 combination-card">
+
+    <!-- CREATE MODE -->
+    <h5 class="fw-bold mb-3" *ngIf="!editingCombination">
+        <i class="fa fa-plus-circle me-1"></i>
+        Create New Combination
+    </h5>
+
+    <!-- UPDATE MODE -->
+    <h5 class="fw-bold mb-3" *ngIf="editingCombination">
+        <i class="fa fa-edit me-1"></i>
+        Update Combination #{{ editingCombination.comb_id }}
+    </h5>
+
+    <div class="row g-3 justify-content-center" *ngFor="let lvl of levels; let i = index">
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">{{ lvl.type_name }}</label>
+        </div>
+
+        <div class="col-md-8">
+            <select class="form-select form-select-sm my-1"
+                    [(ngModel)]="lvl.node_id"
+                    (change)="onNodeSelected(i)">
+                <option value="">Select...</option>
+                <option *ngFor="let n of lvl.nodes" [value]="n.node_id">
+                    {{ n.node_name }}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="text-end mt-4">
+        <button class="btn btn-success px-4"
+                (click)="saveCombination()"
+                [disabled]="!(canCreate || canUpdate)">
+            {{ editingCombination ? 'Update Combination' : 'Save Combination' }}
+        </button>
+    </div>
+</div>
+
+<!-- UPDATE-ONLY USER HELPER -->
+<div *ngIf="!canCreate && canUpdate && !editingCombination"
+     class="alert alert-info mt-3">
+    <i class="fa fa-info-circle me-1"></i>
+    Select a combination below to update it.
+</div>
+
+<!-- =========================
+ SAVED COMBINATIONS
+========================= -->
+<h5 class="fw-bold mt-4 mb-3">
+    <i class="fa fa-list me-1"></i> Saved Combinations
+</h5>
+
+<table class="table table-bordered table-striped combination-table shadow-sm">
+    <thead>
+        <tr>
+            <th width="100">Combination ID</th>
+            <th>Path</th>
+            <th width="120" *ngIf="canUpdate || canDelete">Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr *ngFor="let c of combinations">
+            <td class="fw-semibold">#{{ c.comb_id }}</td>
+
+            <td class="path-cell">
+                <div class="path-line" *ngFor="let p of c.full_path">
+                    <span class="badge type-badge">{{ p.type_name }}</span>
+                    <span class="arrow">→</span>
+                    <span class="badge node-badge">{{ p.node_name }}</span>
+                </div>
+            </td>
+
+            <td class="text-center action-cell" *ngIf="canUpdate || canDelete">
+                <div class="d-flex justify-content-center gap-2">
+                    <button *ngIf="canUpdate"
+                            class="btn btn-primary btn-sm"
+                            (click)="editCombination(c)">
+                        <i class="fa fa-edit"></i>
+                    </button>
+
+                    <button *ngIf="canDelete"
+                            class="btn btn-danger btn-sm"
+                            (click)="delete(c.comb_id)">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

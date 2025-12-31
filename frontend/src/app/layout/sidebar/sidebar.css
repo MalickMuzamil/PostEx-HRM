@@ -1,0 +1,136 @@
+/* ============================
+   SIDEBAR CONTAINER (POSTEX WHITE)
+============================ */
+.sidebar {
+  min-height: 100vh;
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.96),
+      rgba(255, 255, 255, 0.96)
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='%23eaeaea' fill-opacity='0.4'%3E%3Ccircle cx='60' cy='60' r='1'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  border-right: 1px solid #e5e5e5;
+  padding-top: 10px;
+}
+
+/* ============================
+   HEADER & TOGGLE
+============================ */
+.sidebar-header {
+  position: relative;
+}
+
+.sidebar-logo {
+  height: 18px;
+  width: auto;
+  object-fit: contain;
+}
+
+.toggle-btn {
+  position: absolute;
+  right: 0;
+  font-size: 22px;
+  cursor: pointer;
+  color: #111;
+  transition: transform 0.3s ease, color 0.2s ease;
+}
+
+.toggle-btn:hover {
+  color: #a8d972;
+}
+
+.toggle-btn.rotate {
+  transform: rotate(180deg);
+}
+
+/* ============================
+   NAV LINKS
+============================ */
+.sidebar .nav-link {
+  padding: 10px 15px;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+
+.sidebar .nav-link i {
+  font-size: 18px;
+  width: 22px;
+  color: #111;
+}
+
+/* Hover */
+.sidebar .nav-link:hover {
+  background: rgba(168, 217, 114, 0.18);
+}
+
+/* ============================
+   ACTIVE STATE (✅ THIS NOW WORKS)
+============================ */
+.sidebar .nav-link.active {
+  background: rgba(168, 217, 114, 0.25);
+  font-weight: 600;
+}
+
+.sidebar .nav-link.active span,
+.sidebar .nav-link.active i {
+  color: #000000;
+}
+
+/* ============================
+   SUBMENU
+============================ */
+.submenu {
+  margin-top: 6px;
+  padding-left: 16px;
+  border-left: 2px solid rgba(168, 217, 114, 0.4);
+}
+
+.submenu .nav-link {
+  font-size: 13px;
+  color: #555;
+}
+
+.submenu .nav-link.active {
+  background: rgba(168, 217, 114, 0.3);
+}
+
+/* ============================
+   MOBILE
+============================ */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    transform: translateX(-100%);
+  }
+
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+}
+
+.submenu-icon {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+.nav-link {
+  cursor: pointer;
+}
+
+.nav-link i {
+  width: 18px;
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+.nav-link.active i {
+  opacity: 1;
+}

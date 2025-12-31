@@ -1,0 +1,74 @@
+<nav class="sidebar d-flex flex-column p-3" [class.sidebar-collapsed]="isCollapsed">
+  <!-- HEADER -->
+  <div class="sidebar-header mb-4 d-flex align-items-center justify-content-center position-relative">
+    <img *ngIf="!isCollapsed" src="assets/postex_dark.png" class="sidebar-logo" />
+
+    <i
+      class="fa-solid fa-circle-arrow-left toggle-btn position-absolute end-0"
+      [class.rotate]="isCollapsed"
+      (click)="toggleSidebar()"
+    ></i>
+  </div>
+
+  <ul class="nav flex-column">
+
+    <!-- 🔹 TOP SINGLE LINKS (WELCOME FIRST) -->
+    <li class="nav-item" *ngFor="let link of singleLinks" [hidden]="!link.canView">
+      <a
+        class="nav-link d-flex align-items-center gap-2"
+        [routerLink]="link.route"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <i class="fa" [ngClass]="link.icon"></i>
+        <span *ngIf="!isCollapsed">{{ link.label }}</span>
+      </a>
+    </li>
+
+    <hr class="my-2" />
+
+    <!-- 🔹 DROPDOWN SECTIONS -->
+    <li class="nav-item" *ngFor="let section of sidebarSections">
+
+      <!-- SECTION TOGGLE -->
+      <button
+        type="button"
+        class="nav-link d-flex justify-content-between align-items-center w-100 text-start"
+        (click)="toggleSection(section.section)"
+      >
+        <div class="d-flex align-items-center gap-2">
+          <i class="fa" [ngClass]="section.icon"></i>
+          <span *ngIf="!isCollapsed">{{ section.section }}</span>
+        </div>
+
+        <i
+          *ngIf="!isCollapsed"
+          class="fa"
+          [ngClass]="isOpen(section.section) ? 'fa-chevron-up' : 'fa-chevron-down'"
+        ></i>
+      </button>
+
+      <!-- SUB MENU -->
+      <ul
+        class="nav flex-column ms-4 submenu"
+        *ngIf="isOpen(section.section) && !isCollapsed"
+      >
+        <li
+          class="nav-item"
+          *ngFor="let item of section.children"
+          [hidden]="!item.canView"
+        >
+          <a
+            class="nav-link d-flex align-items-center gap-2"
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <i class="fa" [ngClass]="item.icon"></i>
+            <span>{{ item.label }}</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>

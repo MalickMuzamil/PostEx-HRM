@@ -1,0 +1,87 @@
+<div class="card shadow-sm p-4">
+
+    <h3 class="fw-bold mb-4">Add Employee</h3>
+
+    <!-- Row 1 -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Full Name *</label>
+            <input type="text" class="form-control" [(ngModel)]="model.full_name" placeholder="John" maxlength="30"
+                (keypress)="AppValidators.allowOnlyAlphabets($event, 30)"
+                (paste)="AppValidators.handlePaste($event, 'alphabets', 30)">
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Email *</label>
+            <input type="email" class="form-control" [(ngModel)]="model.email" placeholder="test@gmail.com">
+        </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Phone</label>
+            <input type="text" class="form-control" [(ngModel)]="model.phone" placeholder="03XXXXXXXXX" maxlength="11"
+                (focus)="initPhone()" (keypress)="allowPhone($event)" (paste)="handlePhonePaste($event)">
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">CNIC *</label>
+            <input type="text" class="form-control" maxlength="15" [ngModel]="model.cnic" (input)="onCnicChange($event)"
+                (keydown)="allowOnlyNumbers($event)" placeholder="35202-1234567-1" />
+        </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Gender *</label>
+            <select class="form-select" [(ngModel)]="model.gender">
+                <option value="">Select...</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Combination *</label>
+
+            <div class="dropdown w-100">
+                <button class="form-select d-flex justify-content-between align-items-center" data-bs-toggle="dropdown"
+                    type="button">
+                    {{ selectedCombination ? formatPath(selectedCombination.full_path) : "Select..." }}
+                </button>
+
+                <ul class="dropdown-menu w-100 custom-dropdown">
+                    <li *ngFor="let c of combinations" (click)="selectCombination(c)" class="dropdown-item">
+                        {{ formatPath(c.full_path) }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auto-filled -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Department *</label>
+            <input type="text" class="form-control" [(ngModel)]="model.department" placeholder="Enter Department"
+                maxlength="30" (keypress)="AppValidators.allowOnlyAlphabets($event, 30)"
+                (paste)="AppValidators.handlePaste($event, 'alphabets', 30)">
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Designation *</label>
+            <input type="text" class="form-control" [(ngModel)]="model.designation" placeholder="Enter Designation"
+                maxlength="30" (keypress)="AppValidators.allowOnlyAlphabets($event, 30)"
+                (paste)="AppValidators.handlePaste($event, 'alphabets', 30)">
+        </div>
+    </div>
+
+    <div class="text-end">
+        <button class="btn btn-success px-4 me-2" (click)="save()">Save</button>
+        <button class="btn btn-secondary px-4" (click)="close.emit(false)">Cancel</button>
+    </div>
+
+</div>

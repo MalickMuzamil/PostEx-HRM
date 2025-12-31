@@ -1,0 +1,126 @@
+/* Header */
+.page-header h1 {
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.page-header p {
+  margin: 0;
+  color: #6c757d;
+}
+
+/* Main Card */
+.role-rights-card {
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+/* Card Header */
+.card-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  gap: 8px;
+}
+
+.legend-chip {
+  background: #a8d972;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.legend-chip small {
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+/* Breadcrumb */
+.breadcrumb-bar {
+  font-size: 13px;
+  color: #6c757d;
+}
+
+.breadcrumb-bar .fw-semibold {
+  color: #212529;
+}
+
+/* Tree */
+.tree-panel {
+  max-height: 560px;
+  overflow-y: auto;
+}
+
+.tree-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.tree-list li {
+  position: relative;
+  padding-left: 18px;
+}
+
+.tree-list li::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #a8d972;
+}
+
+/* Tree Item */
+.tree-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.15s;
+}
+
+.tree-item:hover {
+  background: #f1f3f5;
+}
+
+.tree-item span {
+  font-weight: 500;
+}
+
+.tree-item input {
+  pointer-events: none;
+  transform: scale(0.9);
+}
+
+/* Action Chips */
+.action-chips {
+  margin-left: 32px;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.chip {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: #e9ecef;
+  color: #6c757d;
+  font-weight: 600;
+}
+
+.chip.active {
+  background: #a8d972;
+  color: #495057;
+}

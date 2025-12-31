@@ -1,0 +1,8 @@
+<div *ngIf="checkingAuth()" class="auth-loader">
+  <div class="spinner"></div>
+  <p>Checking session...</p>
+</div>
+
+<app-app-loader></app-app-loader>
+
+<router-outlet *ngIf="!checkingAuth()"></router-outlet>

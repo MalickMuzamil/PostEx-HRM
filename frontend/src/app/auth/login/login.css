@@ -1,0 +1,72 @@
+/* Full screen center */
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f7fb;
+}
+
+/* Card */
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Heading */
+.login-card h3 {
+  color: #111827;
+}
+
+/* Inputs */
+.login-card .form-control {
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  padding: 0 14px;
+  font-size: 14px;
+}
+
+.login-card .form-control:focus {
+  border-color: #000;
+  box-shadow: none;
+}
+
+/* Button */
+.login-card button {
+  height: 48px;
+  border-radius: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* Error text */
+.login-card small {
+  font-size: 12px;
+}
+
+.logo {
+  width: auto;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 45px; /* icon ke liye space */
+}
+
+.eye-icon {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #000;
+  font-size: 18px;
+}

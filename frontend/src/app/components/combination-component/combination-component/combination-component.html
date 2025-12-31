@@ -1,0 +1,72 @@
+<app-table title="Hierarchy Combinations" [canView]="canView" [showFilters]="true">
+
+    <div table-filters class="d-flex justify-content-end">
+        <select class="form-select w-auto" [(ngModel)]="statusFilter">
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="upcoming">Upcoming</option>
+        </select>
+    </div>
+
+    <thead>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th *ngIf="canShowActions" class="text-center">
+            Actions
+        </th>
+    </thead>
+
+    <tbody>
+
+        <tr *ngIf="loading">
+            <td colspan="4" class="text-center py-3">
+                Loading...
+            </td>
+        </tr>
+
+        <tr *ngFor="let h of pagedHierarchies" [hidden]="loading">
+
+            <td>#{{ h.fh_id }}</td>
+
+            <td>{{ h.short_name }}</td>
+
+            <td>
+                <span class="badge" [ngClass]="{
+                'bg-success text-white': h.status === 'active',
+                'bg-danger': h.status === 'inactive',
+                'bg-warning text-dark': h.status === 'upcoming'
+              }">
+                    {{ h.status | uppercase }}
+                </span>
+            </td>
+
+            <td *ngIf="canShowActions" class="text-center">
+                <button *ngIf="canManage" class="btn btn-primary btn-sm" [disabled]="h.status === 'inactive'"
+                    (click)="open(h)">
+                    <i class="fa fa-cogs me-1"></i> Manage
+                </button>
+            </td>
+
+        </tr>
+
+    </tbody>
+
+</app-table>
+
+<app-pagination [totalItems]="filteredHierarchies().length" [pageSize]="pageSize" [currentPage]="currentPage"
+    (pageChange)="onPageChange($event)">
+</app-pagination>
+
+
+<div class="custom-modal-wrapper" *ngIf="showForm">
+
+    <div class="modal-backdrop fade show"></div>
+
+    <div class="custom-modal fade-in">
+        <app-combination-form [hierarchy]="selectedHierarchy" [combinations]="combinations" (close)="onClose($event)">
+        </app-combination-form>
+    </div>
+
+</div>

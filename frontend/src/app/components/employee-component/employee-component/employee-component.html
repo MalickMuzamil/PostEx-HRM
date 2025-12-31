@@ -1,0 +1,80 @@
+<div class="card shadow-sm p-4">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between mb-3">
+        <h3 class="fw-bold">Employees</h3>
+
+        <button *ngIf="canCreate" class="btn btn-primary" (click)="openForm()">
+            <i class="fa fa-plus me-1"></i> Add Employee
+        </button>
+    </div>
+
+    <app-table title="" [canView]="canView" [showFilters]="false">
+
+        <thead>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Combination</th>
+            <th *ngIf="canShowActions" class="text-center">
+                Actions
+            </th>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let emp of pagedEmployees">
+
+                <td>{{ emp.emp_id }}</td>
+                <td>{{ emp.full_name }}</td>
+                <td>{{ emp.email }}</td>
+
+                <td>
+                    <div class="combination-chain">
+
+                        <span *ngFor="let p of emp.combination_path; let last = last" class="badge bg-secondary">
+                            {{ p.node_name }}
+                        </span>
+
+                        <span class="badge bg-secondary">
+                            {{ emp.department }}
+                        </span>
+
+                        <span class="badge bg-secondary">
+                            {{ emp.designation }}
+                        </span>
+
+                    </div>
+                </td>
+
+                <td *ngIf="canShowActions" class="text-center">
+                    <div class="d-flex justify-content-center gap-2">
+
+                        <button *ngIf="canUpdate" class="btn btn-dark btn-sm" (click)="openForm(emp)">
+                            <i class="fa fa-pen"></i>
+                        </button>
+
+                        <button *ngIf="canDelete" class="btn btn-dark btn-sm" (click)="delete(emp.emp_id)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+
+                    </div>
+                </td>
+
+            </tr>
+        </tbody>
+
+    </app-table>
+
+    <app-pagination [totalItems]="employees.length" [pageSize]="pageSize" [currentPage]="currentPage"
+        (pageChange)="onPageChange($event)">
+    </app-pagination>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-backdrop fade show" *ngIf="showForm"></div>
+
+<div class="custom-modal fade-in" *ngIf="showForm">
+    <app-employee-form [data]="editingEmployee" (close)="onFormClose($event)">
+    </app-employee-form>
+</div>

@@ -1,0 +1,327 @@
+<!-- ================= HEADER ================= -->
+<div class="page-header mb-3">
+  <h1>Role Rights Management</h1>
+  <p>Assign application menus and permissions</p>
+</div>
+
+<div class="card role-rights-card" *ngIf="canView; else noAccess">
+
+  <!-- ================= ROLE SELECT ================= -->
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <label>Role</label>
+      <select class="form-select" [(ngModel)]="selectedRoleId" (change)="onRoleChange()">
+        <option value="">Select Role</option>
+        <option *ngFor="let r of roles" [value]="r.role_id">
+          {{ r.role_name }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ================= SEARCH + ACTIONS ================= -->
+  <div class="d-flex justify-content-between mb-3" *ngIf="selectedRoleId">
+
+    <div class="breadcrumb-bar">
+      <ng-container *ngFor="let b of breadcrumb; let last = last">
+        <span [class.fw-semibold]="last">{{ b.menu_name }}</span>
+        <span *ngIf="!last"> / </span>
+      </ng-container>
+    </div>
+
+    <div class="d-flex align-items-center gap-2 action-bar">
+      <input class="form-control search-input" placeholder="Search menu..." [(ngModel)]="searchTerm" maxlength="30"
+        (keypress)="AppValidators.allowOnlyAlphabets($event, 30)"
+        (paste)="AppValidators.handlePaste($event, 'alphabets', 30)" (input)="onSearchChange()" />
+
+      <button class="btn btn-dark action-btn" (click)="expandAll()">
+        <i class="fas fa-plus-square me-1"></i> Expand All
+      </button>
+
+      <button class="btn btn-dark action-btn" (click)="collapseAll()">
+        <i class="fas fa-minus-square me-1"></i> Collapse All
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= SEARCH RESULTS ================= -->
+  <div class="search-results" *ngIf="searchResults.length">
+    <div class="search-item" *ngFor="let r of searchResults" (click)="selectFromSearch(r)">
+      <strong>{{ r.node.menu_name }}</strong>
+      <div class="path">
+        <span *ngFor="let p of r.path; let last = last">
+          {{ p.menu_name }}<span *ngIf="!last"> / </span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MAIN ================= -->
+  <div class="row" *ngIf="selectedRoleId">
+
+    <!-- ===== LEFT TREE ===== -->
+    <div class="col-md-4">
+      <div class="card h-100">
+        <div class="card-header fw-bold">Applications & Menus</div>
+
+        <div class="card-body tree-panel">
+          <ul class="tree-list">
+            <ng-container *ngFor="let root of appTree">
+              <ng-template [ngTemplateOutlet]="treeNode" [ngTemplateOutletContext]="{ node: root }">
+              </ng-template>
+            </ng-container>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== RIGHT SUMMARY ===== -->
+    <div class="col-md-8">
+      <div class="card h-100 insight-panel">
+
+        <div class="card-header">
+          <h6 class="mb-0">
+            <i class="fas fa-chart-pie me-2"></i>
+            Role Access Summary
+          </h6>
+          <small class="text-muted">Overview of assigned permissions</small>
+        </div>
+
+        <div class="card-body">
+
+          <div class="context-box mb-4">
+            <div><strong>Role:</strong> {{ getRoleName() }}</div>
+            <div><strong>Application:</strong> {{ getAppName() }}</div>
+            <div *ngIf="activeNode">
+              <strong>Focused Menu:</strong> {{ activeNode.menu_name }}
+            </div>
+          </div>
+
+          <div class="stats-grid mb-4">
+            <div class="stat-card">
+              <div class="stat-value">{{ selectedMenuIds.size }}</div>
+              <div class="stat-label">Menus Assigned</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-value">{{ activeAppId ? 1 : 0 }}</div>
+              <div class="stat-label">Active App</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-value">
+                <i class="fas" [ngClass]="selectedMenuIds.size
+                    ? 'fa-check-circle text-success'
+                    : 'fa-minus-circle text-muted'">
+                </i>
+              </div>
+              <div class="stat-label">Configured</div>
+            </div>
+          </div>
+
+          <!-- ===== PREVIEW ===== -->
+          <div>
+            <div class="fw-semibold mb-2">
+              <i class="fas fa-tags me-1"></i>
+              Assigned Menus (Preview)
+            </div>
+
+            <div class="d-flex flex-wrap align-items-center gap-2">
+              <ng-container *ngFor="let chain of previewChains; let ci = index">
+
+                <div class="d-flex align-items-center gap-1">
+                  <ng-container *ngFor="let n of chain; let last = last">
+                    <span class="badge menu-chip px-3 py-2 rounded-pill">
+                      {{ n.menu_name }}
+                    </span>
+                    <i *ngIf="!last" class="fas fa-chevron-right mx-1 text-muted small">
+                    </i>
+                  </ng-container>
+                </div>
+
+                <span *ngIf="ci < previewChains.length - 1" class="mx-2 text-muted fw-semibold">
+                  |
+                </span>
+              </ng-container>
+            </div>
+
+            <div *ngIf="!previewChains.length" class="text-muted mt-2">
+              No menus selected yet
+            </div>
+          </div>
+
+          <div class="hint-box mt-4">
+            <i class="fas fa-circle-info me-1"></i>
+            Select or deselect menus from the left panel.
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SINGLE SAVE ================= -->
+  <div class="text-end mt-4">
+    <button *ngIf="canCreate || canUpdate" class="btn btn-dark px-4" (click)="saveRights()">
+      <i class="fas fa-save me-1"></i> Save Rights
+    </button>
+  </div>
+</div>
+
+<!-- ================= NO ACCESS ================= -->
+<ng-template #noAccess>
+  <div class="alert alert-warning text-center m-4">
+    <i class="fa fa-lock me-2"></i>
+    You do not have permission to access Role Rights.
+  </div>
+</ng-template>
+
+<!-- ================= TREE TEMPLATE (ONLY ONE) ================= -->
+<ng-template #treeNode let-node="node">
+  <li>
+    <div class="tree-item" (click)="toggleExpand(node)">
+
+      <input type="checkbox" [checked]="node.isApp ? isAppChecked(node) : isNodeChecked(node)"
+        (click)="$event.stopPropagation()" (change)="!node.isApp && toggleMenu(node, $event.target.checked)"
+        [disabled]="node.isApp || !canCreate" />
+
+      <span>
+        <i class="fas me-1" [ngClass]="node.children?.length
+            ? 'fa-folder'
+            : 'fa-file-lines text-muted'">
+        </i>
+        {{ node.menu_name }}
+      </span>
+
+      <span class="ms-auto" *ngIf="node.children?.length">
+        <i class="fas" [ngClass]="expandedNodes.has(getNodeKey(node))
+            ? 'fa-minus'
+            : 'fa-plus'">
+        </i>
+      </span>
+    </div>
+
+    <!-- ===== ACTION PERMISSIONS (LEAF ONLY) ===== -->
+    <div *ngIf="expandedNodes.has(getNodeKey(node)) && node.route" class="ms-4 mt-2 permission-box"
+      (click)="$event.stopPropagation()">
+
+      <div class="alert alert-info py-2 px-3 small mb-2">
+        <i class="fas fa-circle-info me-1"></i>
+        View permission is required for Create, Update or Delete.
+      </div>
+
+      <div class="permission-tree">
+        <label class="d-block mb-1">
+          <input type="checkbox" [(ngModel)]="node.permissions.view" [disabled]="
+    node.permissions.create ||
+    node.permissions.update ||
+    node.permissions.delete
+  " [class.dimmed]="
+    node.permissions.create ||
+    node.permissions.update ||
+    node.permissions.delete
+  " (change)="onPermissionToggle(node, 'view')" />
+          View
+        </label>
+
+        <label class="d-block mb-1 ms-3">
+          <input type="checkbox" [(ngModel)]="node.permissions.create" (change)="onPermissionToggle(node, 'create')" />
+          Create
+        </label>
+
+        <label class="d-block mb-1 ms-3">
+          <input type="checkbox" [(ngModel)]="node.permissions.update" (change)="onPermissionToggle(node, 'update')" />
+
+          Update
+        </label>
+
+        <label class="d-block ms-3">
+          <input type="checkbox" [(ngModel)]="node.permissions.delete" (change)="onPermissionToggle(node, 'delete')" />
+          Delete
+        </label>
+      </div>
+    </div>
+
+    <ul *ngIf="expandedNodes.has(getNodeKey(node))">
+      <ng-container *ngFor="let c of node.children">
+        <ng-template [ngTemplateOutlet]="treeNode" [ngTemplateOutletContext]="{ node: c }">
+        </ng-template>
+      </ng-container>
+    </ul>
+  </li>
+</ng-template>
+
+<!-- ================= ASSIGNED RIGHTS TABLE ================= -->
+<div class="card mt-5">
+
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <strong>Assigned Role Rights</strong>
+
+    <div class="d-flex gap-2">
+      <select class="form-select form-select-sm" [(ngModel)]="filterRoleId">
+        <option value="">All Roles</option>
+        <option *ngFor="let r of roles" [value]="r.role_id">
+          {{ r.role_name }}
+        </option>
+      </select>
+
+      <select class="form-select form-select-sm" [(ngModel)]="filterAppId">
+        <option value="">All Applications</option>
+        <option *ngFor="let a of applications" [value]="a.app_id">
+          {{ a.app_name }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <app-table title="" [canView]="true" [showFilters]="false">
+
+    <thead>
+      <th>Role</th>
+      <th>Application</th>
+      <th>Menus</th>
+      <th class="text-end">Actions</th>
+    </thead>
+
+    <tbody *ngIf="filteredAssignedRights.length; else empty">
+      <tr *ngFor="let row of pagedAssignedRights">
+
+        <td>{{ row.role_name }}</td>
+
+        <td>{{ row.app_name }}</td>
+
+        <td>
+          <span class="badge bg-secondary">
+            {{ row.menu_count }} menus
+          </span>
+        </td>
+
+        <td class="text-end">
+          <button *ngIf="canView" class="btn btn-sm btn-outline-primary me-2" (click)="viewRights(row)">
+            View
+          </button>
+
+          <button *ngIf="canDelete" class="btn btn-sm btn-outline-danger" (click)="deleteRights(row)">
+            Delete
+          </button>
+        </td>
+
+      </tr>
+    </tbody>
+
+  </app-table>
+
+  <ng-template #empty>
+    <div class="text-center text-muted py-4">
+      No assigned rights found
+    </div>
+  </ng-template>
+
+</div>
+
+<app-pagination
+  [totalItems]="filteredAssignedRights.length"
+  [pageSize]="pageSize"
+  [currentPage]="currentPage"
+  (pageChange)="onPageChange($event)">
+</app-pagination>

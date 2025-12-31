@@ -1,0 +1,28 @@
+<nav class="navbar app-header px-3">
+
+  <div class="d-flex align-items-center left-section">
+    <i class="fa-solid fa-circle-arrow-left mobile-toggle d-md-none" (click)="toggleSidebar()"></i>
+
+    <span class="header-title">Organization Manager</span>
+  </div>
+
+  <div class="d-flex align-items-center right-section position-relative">
+
+    <!-- Dynamic Welcome -->
+    <span class="welcome-text me-2">
+      Welcome {{ user?.full_name }}
+    </span>
+
+    <!-- Avatar -->
+    <img src="https://ui-avatars.com/api/?name={{ avatarLetter }}&background=0D8ABC&color=fff" class="profile-avatar"
+      (click)="toggleDropdown()" />
+
+    <div class="dropdown-menu-custom" *ngIf="showDropdown">
+      <button class="dropdown-item" (click)="confirmLogout()">
+        <i class="fa-solid fa-right-from-bracket me-2"></i>
+        Logout
+      </button>
+    </div>
+
+  </div>
+</nav>

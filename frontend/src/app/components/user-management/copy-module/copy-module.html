@@ -1,0 +1,66 @@
+<div class="card" *ngIf="canView; else noAccess">
+    <div class="card-header fw-bold d-flex align-items-center gap-2">
+        <i class="fa fa-copy text-warning"></i>
+        Copy Role Rights
+    </div>
+
+    <div class="card-body">
+        <div class="row g-4 align-items-center">
+
+            <!-- SOURCE -->
+            <div class="col-md-5">
+                <label class="fw-semibold text-primary">
+                    <i class="fa fa-database me-1"></i>
+                    Source Role (Copy From)
+                </label>
+
+                <select class="form-select mt-1" [(ngModel)]="sourceRoleId" (ngModelChange)="onSourceChange()">
+                    <option value="">Select Source Role</option>
+                    <option *ngFor="let r of sourceRoles" [value]="r.role_id">
+                        {{ r.role_name }}
+                    </option>
+                </select>
+            </div>
+
+            <!-- ARROW -->
+            <div class="col-md-2 text-center fs-3 text-muted">
+                <i class="fa fa-arrow-right"></i>
+            </div>
+
+            <!-- TARGET -->
+            <div class="col-md-5">
+                <label class="fw-semibold text-success">
+                    <i class="fa fa-bullseye me-1"></i>
+                    Target Role (Paste To)
+                </label>
+
+                <select class="form-select mt-1" [(ngModel)]="targetRoleId">
+                    <option value="">Select Target Role</option>
+
+                    <ng-container *ngFor="let r of roles">
+                        <option *ngIf="r.role_id !== +sourceRoleId" [value]="r.role_id">
+                            {{ r.role_name }}
+                        </option>
+                    </ng-container>
+                </select>
+            </div>
+
+            <!-- ACTION -->
+            <div class="col-12 text-end mt-3">
+                <button *ngIf="canCreate" class="btn btn-warning px-4" (click)="copyRights()"
+                    [disabled]="!sourceRoleId || !targetRoleId">
+                    <i class="fa fa-copy me-1"></i>
+                    Copy Rights
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<ng-template #noAccess>
+    <div class="alert alert-warning text-center m-4">
+        <i class="fa fa-lock me-2"></i>
+        You do not have permission to access this page.
+    </div>
+</ng-template>
